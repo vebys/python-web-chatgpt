@@ -18,6 +18,7 @@
             margin-top: 25px;
             {#background-color: #92b8b1;#}
             {#border-radius: 10px;#}
+            margin-bottom: 120px;
         }
         .my{
             color: #000000;
@@ -100,9 +101,9 @@
                      }
                      $("#all_ask").val(new_ask);
                      $("#content").append(ask_html);
-                        let load = layer.load(0);
+              //          let load = layer.load(0);
                         $.post('', {'new_ask':new_ask,'csrfmiddlewaretoken':csrfmiddlewaretoken}, function (res) {
-                            layer.close(load);
+                         //   layer.close(load);
                              $("#ask").val('');
                                     let answer_html = '<div><span class="chat">'
                                 if (res.code === 0) {
