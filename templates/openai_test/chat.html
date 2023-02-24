@@ -15,10 +15,10 @@
     <title>ChatGpt体验</title>
     <style>
         .content{
-            margin-top: 25px;
-            {#background-color: #92b8b1;#}
-            {#border-radius: 10px;#}
-            margin-bottom: 120px;
+               margin-top: 25px;
+                margin-bottom: 120px;
+                padding-bottom: 20px;
+                overflow: scroll;
         }
         .my{
             color: #000000;
@@ -44,7 +44,11 @@
     </style>
 </head>
 <body>
-<div style="position: fixed;bottom:0px;width: 100%;">
+ <div class="content" id="content">
+
+ </div>
+
+<div style="position: fixed;bottom:0px;width: 100%;background-color: #eeefef;">
  <form class="layui-form" {% block form_attr %}{% endblock %}>
         {% csrf_token %}
 
@@ -67,9 +71,7 @@
     <input type="hidden" name="all_ask" id="all_ask" value="" />
     </form>
 </div>
- <div class="content" id="content">
 
- </div>
 <script>
        var form, layer, table,laydate ;
             layui.use( function () {
@@ -102,13 +104,15 @@
                      $("#all_ask").val(new_ask);
                      $("#content").append(ask_html);
               //          let load = layer.load(0);
+                    $("#ask").val('');
                         $.post('', {'new_ask':new_ask,'csrfmiddlewaretoken':csrfmiddlewaretoken}, function (res) {
                          //   layer.close(load);
-                             $("#ask").val('');
+
                                     let answer_html = '<div><span class="chat">'
                                 if (res.code === 0) {
-                                    $("#all_ask").val($("#all_ask").val()+' \n\n\n'+ res.msg);
-                                      answer_html +='ChatGPT：'+ res.msg + '</span></div>';
+                                    $("#all_ask").val($("#all_ask").val()+' \n'+ res.msg);
+                                      {#answer_html +='ChatGPT：<xmp>'+ res.msg + '</xmp></span></div>';#}
+                                      answer_html +='ChatGPT：<pre><code>'+ res.msg + '</code></pre></span></div>';
                                       $("#content").append(answer_html);
                                 } else {
                                         answer_html +='出错啦：'+ res.msg + '</span></div>';
