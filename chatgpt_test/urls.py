@@ -17,6 +17,6 @@ from django.urls import path
 from chatgpt_test.views import Chat
 
 urlpatterns = [
-    path('index/', Chat.as_view(), name='chatgpt_test-index'),
+    path('', Chat.as_view(), name='chatgpt_test-index'),
 
 ]
