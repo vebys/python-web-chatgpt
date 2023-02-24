@@ -11,7 +11,7 @@ class Chat(View):
   def post(self,request):
     ask = request.POST['new_ask']
     # print(ask)
-    openai.api_key = '你的openai api key'
+    openai.api_key = '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'
     response = openai.Completion.create(
       model='text-davinci-003',
       prompt=ask,
