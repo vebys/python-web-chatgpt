@@ -12,7 +12,7 @@
 <script type="text/javascript" src="{% static 'jquery.min.js' %}"></script>
 
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>ChatGpt体验</title>
     <style>
         .content{
             margin-top: 25px;
@@ -43,26 +43,29 @@
     </style>
 </head>
 <body>
+<div style="position: fixed;bottom:0px;width: 100%;">
  <form class="layui-form" {% block form_attr %}{% endblock %}>
         {% csrf_token %}
-        {% block form %}
-            {% block table %}
+
+
                 <table class="layui-table">
                     <tr>
 
                         <td>
-                            <input class="layui-input" autocomplete="off" id="ask" name="ask" lay-verify="required"
-                                      placeholder="请输入问题"/>
+                            <input class="layui-input" autocomplete="off" id="ask" name="ask"
+                                      placeholder="请输入您的问题"/>
                         </td>
 
                     </tr>
                 </table>
-            {% endblock %}
+
             <div style="text-align: center;">
-                <button class="layui-btn" id="save_btn" lay-submit lay-filter="save">{% block save_button_name %}发送{% endblock %}</button>
+                <button class="layui-btn" id="save_btn" lay-submit lay-filter="save">发送</button>
+                <button class="layui-btn layui-btn-normal" id="save_btn-clear" lay-submit lay-filter="clear">新问题</button>
             </div>
-        {% endblock %}
+    <input type="hidden" name="all_ask" id="all_ask" value="" />
     </form>
+</div>
  <div class="content" id="content">
 
  </div>
@@ -74,20 +77,36 @@
                 layer = layui.layer;
            laydate = layui.laydate;
                 form.render();
-
+                let csrfmiddlewaretoken = $("input[name='csrfmiddlewaretoken']").val();
+ form.on('submit(save)', function (data) {
+     $("#all_ask").val('');
+       return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+ })
                 form.on('submit(save)', function (data) {
                      console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
                     // console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
                     // console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+                     if(data.field.ask == ''){
+                         layer.msg('请输入问题！',{'icon':2,'time':700})
+                         return false;
+                     }
                     let ask_html = '<div ><span class="my">我：'+ data.field.ask+'</span></div>';
+                     let old_ask =$("#all_ask").val();
+                     let new_ask = ''
+                     if (old_ask == ''){
+                          new_ask = data.field.ask;
+                     }else {
+                         new_ask = old_ask + ' \n'+data.field.ask;
+                     }
+                     $("#all_ask").val(new_ask);
                      $("#content").append(ask_html);
                         let load = layer.load(0);
-                        $.post('', data.field, function (res) {
+                        $.post('', {'new_ask':new_ask,'csrfmiddlewaretoken':csrfmiddlewaretoken}, function (res) {
                             layer.close(load);
                              $("#ask").val('');
                                     let answer_html = '<div><span class="chat">'
                                 if (res.code === 0) {
-
+                                    $("#all_ask").val($("#all_ask").val()+' \n\n\n'+ res.msg);
                                       answer_html +='ChatGPT：'+ res.msg + '</span></div>';
                                       $("#content").append(answer_html);
                                 } else {

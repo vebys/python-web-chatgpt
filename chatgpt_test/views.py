@@ -9,7 +9,7 @@ class Chat(View):
 
 
   def post(self,request):
-    ask = request.POST['ask']
+    ask = request.POST['new_ask']
     # print(ask)
     openai.api_key = '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'
     response = openai.Completion.create(
