@@ -12,7 +12,7 @@
 <script type="text/javascript" src="{% static 'jquery.min.js' %}"></script>
 
     <meta charset="UTF-8">
-    <title>ChatGpt体验</title>
+    <title>ChatGPT体验</title>
     <style>
         .content{
                margin-top: 25px;
@@ -112,7 +112,8 @@
                                 if (res.code === 0) {
                                     $("#all_ask").val($("#all_ask").val()+' \n'+ res.msg);
                                       {#answer_html +='ChatGPT：<xmp>'+ res.msg + '</xmp></span></div>';#}
-                                      answer_html +='ChatGPT：<pre><code>'+ res.msg + '</code></pre></span></div>';
+                                      {#answer_html +='ChatGPT：<pre><code>'+ res.msg + '</code></pre></span></div>';#}
+                                      answer_html +='ChatGPT：'+ res.msg + '</span></div>';
                                       $("#content").append(answer_html);
                                 } else {
                                         answer_html +='出错啦：'+ res.msg + '</span></div>';
